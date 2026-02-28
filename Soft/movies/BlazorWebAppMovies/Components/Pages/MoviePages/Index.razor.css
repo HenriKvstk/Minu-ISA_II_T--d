@@ -1,0 +1,9 @@
+﻿body {
+    ::deep tr {
+        height: 3em;
+    }
+
+        ::deep tr > td {
+            vertical-align: middle;
+        }
+}
