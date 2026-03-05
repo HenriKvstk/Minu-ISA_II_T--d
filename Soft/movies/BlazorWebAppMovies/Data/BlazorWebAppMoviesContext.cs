@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Abc.Data;
 using Microsoft.EntityFrameworkCore;
-using BlazorWebAppMovies.Models;
+
 
 namespace BlazorWebAppMovies.Data
 {
@@ -14,6 +15,6 @@ namespace BlazorWebAppMovies.Data
         {
         }
 
-        public DbSet<BlazorWebAppMovies.Models.Movie> Movie { get; set; } = default!;
+        public DbSet<Movie> Movie { get; set; } = default!;
     }
 }

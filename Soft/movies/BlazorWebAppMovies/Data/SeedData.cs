@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using BlazorWebAppMovies.Models;
+using Abc.Data;
 
 namespace BlazorWebAppMovies.Data;
 
