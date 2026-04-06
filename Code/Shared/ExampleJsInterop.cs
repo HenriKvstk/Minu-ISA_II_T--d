@@ -1,8 +1,6 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
-namespace Abc.Razor
+namespace Shared
 {
     // This class provides an example of how JavaScript functionality can be wrapped
     // in a .NET class for easy consumption. The associated JavaScript module is
@@ -14,7 +12,7 @@ namespace Abc.Razor
     public class ExampleJsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
     {
         private readonly Lazy<Task<IJSObjectReference>> moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-                "import", "./_content/Razor/exampleJsInterop.js").AsTask());
+                "import", "./_content/Shared/exampleJsInterop.js").AsTask());
 
         public async ValueTask<string> Prompt(string message)
         {
@@ -28,9 +26,7 @@ namespace Abc.Razor
             {
                 var module = await moduleTask.Value;
                 await module.DisposeAsync();
-                
             }
-            GC.SuppressFinalize(this);
         }
     }
 }

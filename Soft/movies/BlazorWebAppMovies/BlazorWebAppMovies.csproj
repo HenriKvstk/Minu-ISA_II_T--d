@@ -21,7 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Blazor.ServiceDefaults\Blazor.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\..\Code\Data\Data.csproj" />
-    <ProjectReference Include="..\..\..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\..\..\Code\Shared\Shared.csproj" />
   </ItemGroup>
 
 </Project>
