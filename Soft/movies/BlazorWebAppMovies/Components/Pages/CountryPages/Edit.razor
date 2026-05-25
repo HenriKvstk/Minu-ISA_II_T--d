@@ -1,11 +1,8 @@
 ﻿@page "/countries/edit"
 @attribute [ExcludeFromInteractiveRouting]
-
-@using Microsoft.EntityFrameworkCore
 @using Abc.Data
-@using BlazorWebAppMovies.Data
-@inject IDbContextFactory<ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
+@inject ICountriesRepo repo
 
 <PageTitle>Edit</PageTitle>
 
@@ -47,36 +44,18 @@ else
 @code {
     [SupplyParameterFromQuery] private Guid Id { get; set; }
     [SupplyParameterFromForm] private Country country { get; set; }
-    protected override async Task OnInitializedAsync() {
-        await using var context = DbFactory.CreateDbContext();
-        country ??= await context.Countries.FirstOrDefaultAsync(m => m.Id == Id);
+
+    protected override async Task OnInitializedAsync()
+    {
+        country ??= await repo.GetAsync(Id);
+
         if (country is null) NavigationManager.NotFound();
     }
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
-    private async Task updateCountry() {
-        using var context = DbFactory.CreateDbContext();
-        var existing = await context.Countries.FirstOrDefaultAsync(c => c.Id == country!.Id);
-        if (existing is null) {
-            NavigationManager.NotFound();
-            return;
-        }
 
-        existing.Name = country!.Name;
-        existing.Code = country.Code;
-        existing.Details = country.Details;
-        existing.IsoCode = country.IsoCode;
-        existing.NativeName = country.NativeName;
-        existing.NumericCode = country.NumericCode;
-        existing.OfficialName = country.OfficialName;
-        existing.ValidFrom = country.ValidFrom;
-        existing.ValidTo = country.ValidTo;
+    private async Task updateCountry()
+    {
+        await repo.UpdateAsync(country!);
 
-        await context.SaveChangesAsync();
         NavigationManager.NavigateTo("/countries");
-    }
-    private bool countryExists(Guid id) {
-        using var context = DbFactory.CreateDbContext();
-        return context.Countries.Any(e => e.Id == id);
     }
 }

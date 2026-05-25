@@ -1,10 +1,8 @@
 ﻿@page "/countries/create"
-@using Microsoft.EntityFrameworkCore
 @using Abc.Data
 @attribute [ExcludeFromInteractiveRouting]
-@inject IDbContextFactory<Data.ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
-
+@inject ICountriesRepo repo
 <PageTitle>Create Country</PageTitle>
 
 <h1>Create</h1>
@@ -38,15 +36,14 @@
 
 
 @code {
-    [SupplyParameterFromForm]
-    private Country country { get; set; } = default!;
+    [SupplyParameterFromForm] private Country country { get; set; } = default!;
 
     protected override void OnInitialized() => country ??= new();
+
     private async Task addCountry()
     {
-        await using var context = DbFactory.CreateDbContext();
-        context.Countries.Add(country);
-        await context.SaveChangesAsync();
+        await repo.CreateAsync(country);
+
         NavigationManager.NavigateTo("/countries");
     }
 }

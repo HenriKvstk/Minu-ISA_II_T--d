@@ -1,9 +1,13 @@
+using System;
+using Abc.Infra;
 using BlazorWebAppMovies.Components;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using BlazorWebAppMovies.Data;
+using Microsoft.Extensions.Hosting;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("BlazorWebAppMoviesContext") ??
@@ -16,7 +20,10 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.AddServiceDefaults();
 
-// Add services to the container.
+builder.Services.AddScoped<IMoviesRepo, MoviesRepo>();
+builder.Services.AddScoped<ICountriesRepo, CountriesRepo>();
+builder.Services.AddScoped<ICurrenciesRepo, CurrenciesRepo>();
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
@@ -25,8 +32,6 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
-    SeedData.Initialize(services);
 }
 
 app.MapDefaultEndpoints();

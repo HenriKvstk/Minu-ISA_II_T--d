@@ -1,0 +1,45 @@
+@page "/currencies"
+@rendermode InteractiveServer
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+@implements IAsyncDisposable
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
+
+<PageTitle>Currencies</PageTitle>
+
+<h1>Currencies</h1>
+
+<p>
+    <a href="currencies/create">Create New</a>
+</p>
+<div>
+    <QuickGrid Class="table" Items="context.Currencies" Pagination="pagination">
+        <PropertyColumn Property="x => x.Name" Sortable="true" />
+        <PropertyColumn Property="x => x.Code" />
+        <PropertyColumn Property="x => x.Details" />
+        <PropertyColumn Property="x => x.NumericCode" />
+        <PropertyColumn Property="x => x.MajorUnitSymbol" />
+        <PropertyColumn Property="x => x.MinorUnitSymbol" />
+        <PropertyColumn Property="x => x.RatioOfMinorUnit" />
+        <PropertyColumn Property="x => x.ValidFrom" />
+        <PropertyColumn Property="x => x.ValidTo" />
+
+        <TemplateColumn Context="x">
+            <a href="@($"currencies/edit?id={x.Id}")">Edit</a> |
+            <a href="@($"currencies/details?id={x.Id}")">Details</a> |
+            <a href="@($"currencies/delete?id={x.Id}")">Delete</a>
+        </TemplateColumn>
+    </QuickGrid>
+</div>
+<Paginator State="pagination" />
+
+@code {
+    private ApplicationDbContext context = default!;
+
+    protected override void OnInitialized() => context = DbFactory.CreateDbContext();
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
+}

@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+	  <CompressionEnabled>false</CompressionEnabled>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
   </PropertyGroup>
 
@@ -23,7 +24,13 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Blazor.ServiceDefaults\Blazor.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\..\Code\Data\Data.csproj" />
+    <ProjectReference Include="..\..\..\Code\Infra\Infra.csproj" />
     <ProjectReference Include="..\..\..\Code\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

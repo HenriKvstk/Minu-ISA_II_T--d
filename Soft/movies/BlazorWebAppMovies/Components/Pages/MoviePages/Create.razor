@@ -1,45 +1,27 @@
 ﻿@page "/movies/create"
-@using Microsoft.EntityFrameworkCore
 @using Abc.Data
-@inject IDbContextFactory<BlazorWebAppMovies.Data.ApplicationDbContext> DbFactory
+@using Microsoft.EntityFrameworkCore
+@attribute [ExcludeFromInteractiveRouting]
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
 
-<PageTitle>Create</PageTitle>
+<PageTitle>Create Movie</PageTitle>
 
 <h1>Create</h1>
 
 <h2>Movie</h2>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <EditForm method="post" Model="Movie" OnValidSubmit="AddMovie" FormName="create" Enhance>
+        <EditForm method="post" Model="movie" OnValidSubmit="addMovie" FormName="create" Enhance>
             <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert"/>
-            <div class="mb-3">
-                <label for="title" class="form-label">Title:</label> 
-                <InputText id="title" @bind-Value="Movie.Name" class="form-control" /> 
-                <ValidationMessage For="() => Movie.Name" class="text-danger" />
-            </div>        
-            <div class="mb-3">
-                <label for="releasedate" class="form-label">Release Date:</label> 
-                <InputDate id="releasedate" @bind-Value="Movie.ValidFrom" class="form-control" /> 
-                <ValidationMessage For="() => Movie.ValidFrom" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="genre" class="form-label">Genre:</label> 
-                <InputText id="genre" @bind-Value="Movie.Genre" class="form-control" /> 
-                <ValidationMessage For="() => Movie.Genre" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="price" class="form-label">Price:</label> 
-                <InputNumber id="price" @bind-Value="Movie.Price" class="form-control" /> 
-                <ValidationMessage For="() => Movie.Price" class="text-danger" /> 
-            </div>
-            <div class="mb-3">
-                <label for="rating" class="form-label">Rating:</label> 
-                <InputText id="rating" @bind-Value="Movie.Rating" class="form-control" /> 
-                <ValidationMessage For="() => Movie.Rating" class="text-danger" /> 
-            </div>
+            <ValidationSummary class="text-danger" role="alert" />
+            <MyPropertyEditor TValue="string" Id="title" Label="Title:" @bind-Value="movie.Name" />
+            <MyPropertyEditor TValue="DateTime?" Id="releasedate" Label="Release Date:" @bind-Value="movie.ValidFrom" />
+            <MyPropertyEditor TValue="string" Id="genre" Label="Genre:" @bind-Value="movie.Genre" />
+            <MyPropertyEditor TValue="decimal" Id="price" Label="Price:" @bind-Value="movie.Price" />
+            <MyPropertyEditor TValue="string" Id="rating" Label="Rating:" @bind-Value="movie.Rating" />
             <button type="submit" class="btn btn-primary">Create</button>
         </EditForm>
     </div>
@@ -51,13 +33,13 @@
 
 @code {
     [SupplyParameterFromForm]
-    private Movie Movie { get; set; } = default!;
+    private Movie movie { get; set; } = default!;
 
-    protected override void OnInitialized() => Movie ??= new();
-    private async Task AddMovie()
+    protected override void OnInitialized() => movie ??= new();
+    private async Task addMovie()
     {
         using var context = DbFactory.CreateDbContext();
-        context.Movie.Add(Movie);
+        context.Movie.Add(movie);
         await context.SaveChangesAsync();
         NavigationManager.NavigateTo("/movies");
     }

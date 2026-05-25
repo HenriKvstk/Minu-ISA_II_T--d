@@ -1,11 +1,10 @@
 ﻿@page "/countries"
-@rendermode InteractiveServer
-@using Microsoft.EntityFrameworkCore
-@using Microsoft.AspNetCore.Components.QuickGrid
+@attribute [ExcludeFromInteractiveRouting]
 @using Abc.Data
-@using BlazorWebAppMovies.Data
-@implements IAsyncDisposable
-@inject IDbContextFactory<ApplicationDbContext> DbFactory
+@using System.Linq
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject NavigationManager NavigationManager
+@inject ICountriesRepo repo
 
 <PageTitle>Countries</PageTitle>
 
@@ -15,40 +14,32 @@
     <a href="countries/create">Create New</a>
 </p>
 <div>
-<QuickGrid Class="table" Items="context.Countries" Pagination="pagination">
-    <PropertyColumn Property="x => x.Name" Sortable="true" />
-    <PropertyColumn Property="x => x.Code" Title="Release Date" />
-    <PropertyColumn Property="x => x.Details" />
-    <PropertyColumn Property="x => x.IsoCode" />
-    <PropertyColumn Property="x => x.NativeName" />
-    <PropertyColumn Property="x => x.NumericCode" />
-    <PropertyColumn Property="x => x.OfficialName" />
-    <PropertyColumn Property="x => x.ValidFrom" />
+    <QuickGrid Class="table" Items="Countries">
+        <PropertyColumn Property="x => x.Name" />
+        <PropertyColumn Property="x => x.Code" />
+        <PropertyColumn Property="x => x.Details" />
+        <PropertyColumn Property="x => x.IsoCode" />
+        <PropertyColumn Property="x => x.NativeName" />
+        <PropertyColumn Property="x => x.NumericCode" />
+        <PropertyColumn Property="x => x.OfficialName" />
+        <PropertyColumn Property="x => x.ValidFrom" />
         <PropertyColumn Property="x => x.ValidTo" />
 
-    
-
-    <TemplateColumn Context="x">
-        <a href="@($"countries/edit?id={x.Id}")">Edit</a> |
+        <TemplateColumn Context="x">
+            <a href="@($"countries/edit?id={x.Id}")">Edit</a> |
             <a href="@($"countries/details?id={x.Id}")">Details</a> |
             <a href="@($"countries/delete?id={x.Id}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
+        </TemplateColumn>
+    </QuickGrid>
 </div>
-<Paginator State="pagination" />
+
 
 @code {
-    private ApplicationDbContext context = default!;
+    private IQueryable<Country> Countries = Enumerable.Empty<Country>().AsQueryable();
 
-    protected override void OnInitialized()=> context = DbFactory.CreateDbContext();
-    
-
-    public async ValueTask DisposeAsync() => await context.DisposeAsync();
-
-    private string titleFilter = string.Empty;
-
-    private IQueryable<Movie> FilteredMovies => 
-        context.Movie.Where(m => m.Name!.Contains(titleFilter));
-
-    private PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
+    protected override async Task OnInitializedAsync()
+    {
+        if (repo is null) return;
+        Countries = (await repo.GetAsync()).AsQueryable();
+    }
 }
