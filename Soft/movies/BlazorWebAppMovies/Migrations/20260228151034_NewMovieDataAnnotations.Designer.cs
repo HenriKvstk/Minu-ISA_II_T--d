@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazorWebAppMovies.Migrations
 {
-    [DbContext(typeof(BlazorWebAppMoviesContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20260228151034_NewMovieDataAnnotations")]
     partial class NewMovieDataAnnotations
     {

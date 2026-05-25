@@ -1,8 +1,7 @@
 ﻿@page "/movies/delete"
 @using Microsoft.EntityFrameworkCore
 @using Abc.Data
-@using Abc.Shared.Components
-@inject IDbContextFactory<BlazorWebAppMovies.Data.BlazorWebAppMoviesContext> DbFactory
+@inject IDbContextFactory<BlazorWebAppMovies.Data.ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
 
 <PageTitle>Delete</PageTitle>
@@ -18,11 +17,11 @@
         <p><em>Loading...</em></p>
     }
     else {
-        <MyViewItem Label="Title" Value="@movie.Title" />
-        <MyViewItem Label="Release Date" Value="@movie.ReleaseDate" />
-        <MyViewItem Label="Genre" Value="@movie.Genre" />
-        <MyViewItem Label="Price" Value="@movie.Price" />
-        <MyViewItem Label="Rating" Value="@movie.Rating" />
+        <MyPropertyViewer Label="Title" Value="@movie.Name" />
+        <MyPropertyViewer Label="Release Date" Value="@movie.ValidFrom" />
+        <MyPropertyViewer Label="Genre" Value="@movie.Genre" />
+        <MyPropertyViewer Label="Price" Value="@movie.Price" />
+        <MyPropertyViewer Label="Rating" Value="@movie.Rating" />
         <EditForm method="post" Model="movie" OnValidSubmit="DeleteMovie" FormName="delete" Enhance>
             <button type="submit" class="btn btn-danger" disabled="@(movie is null)">Delete</button> |
             <a href="/movies">Back to List</a>
@@ -34,7 +33,7 @@
     private Movie? movie;
 
     [SupplyParameterFromQuery]
-    private int Id { get; set; }
+    private Guid Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

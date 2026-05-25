@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using BlazorWebAppMovies.Data;
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContextFactory<BlazorWebAppMoviesContext>(options =>
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("BlazorWebAppMoviesContext") ??
         throw new InvalidOperationException(

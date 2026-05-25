@@ -1,31 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Abc.Data.Common;
 
 namespace Abc.Data;
 
-public class Country
+public sealed class Country : NamedEntity
 {
-    public int Id { get; set; }
-
-    [Required]
-    [StringLength(60, MinimumLength = 3)]
-    [RegularExpression(@"^[A-Z]+[a-zA-Z\s-]*$")]
-    public string Name { get; set; }
-
-    [Required]
-    [StringLength(60, MinimumLength = 3)]
-    [RegularExpression(@"^[A-Z]+[a-zA-Z\s-]*$")]
-    public string Capital { get; set; }
-
-    [Range(1, long.MaxValue)]
-    public long Population { get; set; }
-
-    [Required]
-    [StringLength(20)]
-    [RegularExpression(@"^[A-Z]+[a-zA-Z\s-]*$")]
-    public string Continent { get; set; }
-
-    [Required]
-    public int CurrencyId { get; set; }
-
-    public Currency Currency { get; set; }
+    public string OfficialName { get; set; } = "";
+    public string NativeName { get; set; } = "";
+    public string NumericCode { get; set; } = "";
+    public bool IsIsoCountry { get; set; }
+    public bool IsLoyaltyProgram { get; set; }
+    public string IsoCode { get; set; } = "";
 }

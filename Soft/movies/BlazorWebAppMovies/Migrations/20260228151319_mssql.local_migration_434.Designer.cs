@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazorWebAppMovies.Migrations
 {
-    [DbContext(typeof(BlazorWebAppMoviesContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20260228151319_mssql.local_migration_434")]
     partial class mssqllocal_migration_434
     {

@@ -4,6 +4,7 @@ using BlazorWebAppMovies.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorWebAppMovies.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class BlazorWebAppMoviesContextModelSnapshot : ModelSnapshot
+    [Migration("20260524155731_v.24.05.2026-Countries")]
+    partial class v24052026Countries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,21 +76,16 @@ namespace BlazorWebAppMovies.Migrations
 
             modelBuilder.Entity("Abc.Data.Movie", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Details")
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Genre")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
@@ -96,16 +94,13 @@ namespace BlazorWebAppMovies.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                    b.Property<DateOnly>("ReleaseDate")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime?>("ValidFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ValidTo")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
 
                     b.HasKey("Id");
 

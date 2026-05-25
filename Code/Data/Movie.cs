@@ -1,26 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Abc.Data.Common;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Abc.Data;
 
-public class Movie
+public class Movie : NamedEntity
 {
-    public int Id { get; set; }
-
-    [Required]
-    [StringLength(60, MinimumLength = 3)]
-    public string Title { get; set; }
-
-    public DateOnly ReleaseDate { get; set; }
-
-    [Required]
-    [StringLength(30)]
-    [RegularExpression(@"^[A-Z]+[a-zA-Z()\s-]*$")]
+    [DisplayName("Title")] public override string Name { get; set; }
+    [DisplayName("ReleaseDate")] public override DateTime? ValidFrom { get; set; }
     public string Genre { get; set; }
-
-    [Range(0, 100)]
-    [DataType(DataType.Currency)]
-    [Column(TypeName = "decimal(18, 2)")]
+    [DataType(DataType.Currency), Column(TypeName = "decimal(18, 2)")]
     public decimal Price { get; set; }
 
     [Required]

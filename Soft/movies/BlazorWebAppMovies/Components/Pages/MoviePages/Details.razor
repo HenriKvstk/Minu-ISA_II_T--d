@@ -1,7 +1,7 @@
 ﻿@page "/movies/details"
 @using Microsoft.EntityFrameworkCore
 @using Abc.Data
-@inject IDbContextFactory<BlazorWebAppMovies.Data.BlazorWebAppMoviesContext> DbFactory
+@inject IDbContextFactory<BlazorWebAppMovies.Data.ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
 
 <PageTitle>Details</PageTitle>
@@ -18,9 +18,9 @@
     else {
         <dl class="row">
             <dt class="col-sm-2">Title</dt>
-            <dd class="col-sm-10">@movie.Title</dd>
+            <dd class="col-sm-10">@movie.Name</dd>
             <dt class="col-sm-2">Release Date</dt>
-            <dd class="col-sm-10">@movie.ReleaseDate</dd>
+            <dd class="col-sm-10">@movie.ValidFrom</dd>
             <dt class="col-sm-2">Genre</dt>
             <dd class="col-sm-10">@movie.Genre</dd>
             <dt class="col-sm-2">Price</dt>
@@ -39,7 +39,7 @@
     private Movie? movie;
 
     [SupplyParameterFromQuery]
-    private int Id { get; set; }
+    private Guid Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
